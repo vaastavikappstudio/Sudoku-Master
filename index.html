@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Master by Vastavik App Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --primary-dark: #3a5a8c;
+            --accent: #6d5cae;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --gray: #6c757d;
+            --border-radius: 12px;
+            --shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --light: #212529;
+            --dark: #f8f9fa;
+            --gray: #adb5bd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            transition: var(--transition);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Screen Management */
+        .screen {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Home Screen */
+        #homeScreen {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 40px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .logo p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .menu-btn {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 18px 25px;
+            border-radius: var(--border-radius);
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .menu-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        .menu-btn i {
+            font-size: 1.5rem;
+        }
+
+        .settings-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .settings-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: rotate(30deg);
+        }
+
+        /* Game Screen */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 15px 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .back-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .game-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Top Banner Ad Placeholder */
+        .ad-banner {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .ad-banner i {
+            margin-right: 8px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .difficulty-display {
+            font-size: 1.2rem;
+            font-weight: 600;
+            background-color: var(--accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+            gap: 1px;
+            background-color: var(--dark);
+            border: 2px solid var(--dark);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            margin-bottom: 20px;
+        }
+
+        .cell {
+            background-color: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .cell.prefilled {
+            color: var(--primary);
+        }
+
+        .cell.user-filled {
+            color: var(--dark);
+        }
+
+        .cell.selected {
+            background-color: #d1e7fd;
+        }
+
+        .cell.highlighted {
+            background-color: #e3f2fd;
+        }
+
+        .cell.same-number {
+            background-color: #bbdefb;
+        }
+
+        .cell.error {
+            color: #f44336;
+        }
+
+        .cell.border-right-thick {
+            border-right: 2px solid var(--dark);
+        }
+
+        .cell.border-bottom-thick {
+            border-bottom: 2px solid var(--dark);
+        }
+
+        .notes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            font-size: 0.6rem;
+            padding: 2px;
+            color: var(--gray);
+        }
+
+        .note-number {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .number-pad {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .number-btn {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: var(--border-radius);
+            padding: 15px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .number-btn:hover {
+            background-color: #f8f9fa;
+        }
+
+        .number-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .number-btn.eraser {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .number-btn.note {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .number-btn.hint {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .number-btn.undo {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 15px;
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-btn.primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .control-btn.secondary {
+            background-color: #e9ecef;
+            color: var(--dark);
+        }
+
+        .control-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Bottom Banner Ad Placeholder */
+        .ad-banner-bottom {
+            background: linear-gradient(to right, #2193b0, #6dd5ed);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        .ad-banner-bottom i {
+            margin-right: 8px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow);
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal h2 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .modal p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .modal-btn.primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background-color: #e9ecef;
+            color: var(--dark);
+        }
+
+        /* Settings Modal */
+        .settings-modal {
+            text-align: left;
+        }
+
+        .setting-option {
+            margin-bottom: 20px;
+        }
+
+        .setting-option h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .difficulty-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .difficulty-option {
+            padding: 12px 15px;
+            border: 1px solid #dee2e6;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .difficulty-option:hover {
+            background-color: #f8f9fa;
+        }
+
+        .difficulty-option.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .theme-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1px solid #dee2e6;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background-color: #f8f9fa;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background-color: #ccc;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: var(--transition);
+        }
+
+        .theme-toggle.active .toggle-switch {
+            background-color: var(--primary);
+        }
+
+        .theme-toggle.active .toggle-switch::after {
+            transform: translateX(26px);
+        }
+
+        /* Interstitial Ad Placeholder */
+        .interstitial-ad {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .interstitial-ad h3 {
+            margin-bottom: 15px;
+        }
+
+        .interstitial-ad p {
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .game-info {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+            
+            .cell {
+                font-size: 1.2rem;
+            }
+            
+            .number-btn {
+                padding: 12px 0;
+                font-size: 1rem;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .cell {
+                font-size: 1rem;
+            }
+            
+            .notes {
+                font-size: 0.5rem;
+            }
+            
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Screen -->
+    <div id="homeScreen" class="screen active">
+        <button class="settings-btn" id="homeSettingsBtn">
+            <i class="fas fa-cog"></i>
+        </button>
+        
+        <div class="logo">
+            <h1>Sudoku Master</h1>
+            <p>by Vastavik App Studio</p>
+        </div>
+        
+        <div class="menu">
+            <button class="menu-btn" id="playBtn">
+                <i class="fas fa-play"></i>
+                Play Sudoku
+            </button>
+            <button class="menu-btn" id="dailyChallengeBtn">
+                <i class="fas fa-calendar-day"></i>
+                Daily Challenge
+            </button>
+            <button class="menu-btn" id="statisticsBtn">
+                <i class="fas fa-chart-bar"></i>
+                Statistics
+            </button>
+            <button class="menu-btn" id="leaderboardBtn">
+                <i class="fas fa-trophy"></i>
+                Leaderboard
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen">
+        <!-- Top Banner Ad Placeholder -->
+        <div class="ad-banner">
+            <i class="fas fa-ad"></i> Advertisement - Try our new puzzle collection!
+        </div>
+
+        <header>
+            <div class="header-content">
+                <button class="back-btn" id="backBtn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="game-title">Sudoku</div>
+                <div class="controls">
+                    <button class="btn" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="btn" id="pauseBtn">
+                        <i class="fas fa-pause"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="game-info">
+                <div class="timer">
+                    <i class="fas fa-clock"></i>
+                    <span id="timeDisplay">00:00</span>
+                </div>
+                <div class="difficulty-display">
+                    <i class="fas fa-chart-line"></i>
+                    <span id="difficultyDisplay">Easy</span>
+                </div>
+            </div>
+
+            <div class="game-board" id="gameBoard">
+                <!-- Game board will be generated by JavaScript -->
+            </div>
+
+            <div class="number-pad" id="numberPad">
+                <!-- Number pad will be generated by JavaScript -->
+            </div>
+
+            <div class="game-controls">
+                <button class="control-btn secondary" id="eraseBtn">
+                    <i class="fas fa-eraser"></i> Erase
+                </button>
+                <button class="control-btn secondary" id="undoBtn">
+                    <i class="fas fa-undo"></i> Undo
+                </button>
+                <button class="control-btn primary" id="hintBtn">
+                    <i class="fas fa-lightbulb"></i> Hint
+                </button>
+            </div>
+
+            <!-- Interstitial Ad Placeholder -->
+            <div class="interstitial-ad">
+                <h3>Advertisement</h3>
+                <p>Full-screen ad would appear here after completing a puzzle</p>
+                <button class="modal-btn secondary">Close Ad</button>
+            </div>
+        </div>
+
+        <!-- Bottom Banner Ad Placeholder -->
+        <div class="ad-banner-bottom">
+            <i class="fas fa-ad"></i> Advertisement - Unlock premium features now!
+        </div>
+    </div>
+
+    <!-- Win Modal -->
+    <div class="modal" id="winModal">
+        <div class="modal-content">
+            <h2>🎉 You Solved It!</h2>
+            <p>Congratulations! You've successfully completed the Sudoku puzzle.</p>
+            <p>Time: <span id="finalTime">00:00</span></p>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" id="playAgainBtn">Play Again</button>
+                <button class="modal-btn secondary" id="shareBtn">
+                    <i class="fas fa-share-alt"></i> Share Score
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hint Ad Modal -->
+    <div class="modal" id="hintAdModal">
+        <div class="modal-content">
+            <h2>Get a Hint</h2>
+            <p>Watch a short video to get a hint for this puzzle.</p>
+            <div class="interstitial-ad">
+                <h3>Video Advertisement</h3>
+                <p>Video ad would play here</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" id="watchAdBtn">Watch Ad</button>
+                <button class="modal-btn secondary" id="cancelHintBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content settings-modal">
+            <h2>Settings</h2>
+            
+            <div class="setting-option">
+                <h3>Difficulty</h3>
+                <div class="difficulty-options">
+                    <div class="difficulty-option active" data-difficulty="easy">
+                        <span>Easy</span>
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="difficulty-option" data-difficulty="medium">
+                        <span>Medium</span>
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="difficulty-option" data-difficulty="hard">
+                        <span>Hard</span>
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setting-option">
+                <h3>Appearance</h3>
+                <div class="theme-toggle" id="themeToggleSetting">
+                    <span>Dark Mode</span>
+                    <div class="toggle-switch"></div>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn primary" id="closeSettingsBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            board: [],
+            solution: [],
+            initialBoard: [],
+            selectedCell: null,
+            noteMode: false,
+            timer: 0,
+            timerRunning: true,
+            difficulty: 'easy',
+            moves: [],
+            hintsUsed: 0
+        };
+
+        // Screen management
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Initialize the game
+        function initGame() {
+            createGameBoard();
+            createNumberPad();
+            generatePuzzle();
+            startTimer();
+            loadGameState();
+            setupEventListeners();
+        }
+
+        // Create the 9x9 Sudoku board
+        function createGameBoard() {
+            const gameBoard = document.getElementById('gameBoard');
+            gameBoard.innerHTML = '';
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    
+                    // Add thick borders for 3x3 blocks
+                    if (col === 2 || col === 5) {
+                        cell.classList.add('border-right-thick');
+                    }
+                    if (row === 2 || row === 5) {
+                        cell.classList.add('border-bottom-thick');
+                    }
+                    
+                    gameBoard.appendChild(cell);
+                }
+            }
+        }
+
+        // Create the number pad
+        function createNumberPad() {
+            const numberPad = document.getElementById('numberPad');
+            numberPad.innerHTML = '';
+
+            // Numbers 1-9
+            for (let i = 1; i <= 9; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'number-btn';
+                btn.textContent = i;
+                btn.dataset.number = i;
+                numberPad.appendChild(btn);
+            }
+
+            // Special buttons
+            const specialButtons = [
+                { text: 'Erase', className: 'eraser', icon: 'fa-eraser' },
+                { text: 'Note', className: 'note', icon: 'fa-pencil-alt' },
+                { text: 'Hint', className: 'hint', icon: 'fa-lightbulb' },
+                { text: 'Undo', className: 'undo', icon: 'fa-undo' }
+            ];
+
+            specialButtons.forEach(button => {
+                const btn = document.createElement('button');
+                btn.className = `number-btn ${button.className}`;
+                btn.innerHTML = `<i class="fas ${button.icon}"></i>`;
+                btn.title = button.text;
+                numberPad.appendChild(btn);
+            });
+        }
+
+        // Generate a Sudoku puzzle based on difficulty
+        function generatePuzzle() {
+            // In a real implementation, this would generate actual Sudoku puzzles
+            // For this demo, we'll use a fixed puzzle for each difficulty
+            
+            const puzzles = {
+                easy: [
+                    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+                    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+                    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+                    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+                    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+                    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+                    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+                    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+                    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+                ],
+                medium: [
+                    [0, 0, 0, 6, 0, 0, 4, 0, 0],
+                    [7, 0, 0, 0, 0, 3, 6, 0, 0],
+                    [0, 0, 0, 0, 9, 1, 0, 8, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 5, 0, 1, 8, 0, 0, 0, 3],
+                    [0, 0, 0, 3, 0, 6, 0, 4, 5],
+                    [0, 4, 0, 2, 0, 0, 0, 6, 0],
+                    [9, 0, 3, 0, 0, 0, 0, 0, 0],
+                    [0, 2, 0, 0, 0, 0, 1, 0, 0]
+                ],
+                hard: [
+                    [0, 0, 0, 6, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 5, 0, 1],
+                    [3, 6, 9, 0, 8, 0, 4, 0, 0],
+                    [0, 0, 0, 0, 0, 3, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+                ]
+            };
+
+            // For demo purposes, using the same solution for all difficulties
+            const solution = [
+                [5, 3, 4, 6, 7, 8, 9, 1, 2],
+                [6, 7, 2, 1, 9, 5, 3, 4, 8],
+                [1, 9, 8, 3, 4, 2, 5, 6, 7],
+                [8, 5, 9, 7, 6, 1, 4, 2, 3],
+                [4, 2, 6, 8, 5, 3, 7, 9, 1],
+                [7, 1, 3, 9, 2, 4, 8, 5, 6],
+                [9, 6, 1, 5, 3, 7, 2, 8, 4],
+                [2, 8, 7, 4, 1, 9, 6, 3, 5],
+                [3, 4, 5, 2, 8, 6, 1, 7, 9]
+            ];
+
+            gameState.board = JSON.parse(JSON.stringify(puzzles[gameState.difficulty]));
+            gameState.initialBoard = JSON.parse(JSON.stringify(puzzles[gameState.difficulty]));
+            gameState.solution = solution;
+            gameState.moves = [];
+            gameState.hintsUsed = 0;
+            
+            // Update difficulty display
+            document.getElementById('difficultyDisplay').textContent = 
+                gameState.difficulty.charAt(0).toUpperCase() + gameState.difficulty.slice(1);
+            
+            renderBoard();
+        }
+
+        // Render the board with current state
+        function renderBoard() {
+            const cells = document.querySelectorAll('.cell');
+            
+            cells.forEach(cell => {
+                const row = parseInt(cell.dataset.row);
+                const col = parseInt(cell.dataset.col);
+                const value = gameState.board[row][col];
+                
+                // Clear cell content
+                cell.textContent = '';
+                cell.className = 'cell';
+                
+                // Add thick borders for 3x3 blocks
+                if (col === 2 || col === 5) {
+                    cell.classList.add('border-right-thick');
+                }
+                if (row === 2 || row === 5) {
+                    cell.classList.add('border-bottom-thick');
+                }
+                
+                // Set cell value and styling
+                if (value !== 0) {
+                    cell.textContent = value;
+                    
+                    if (gameState.initialBoard[row][col] !== 0) {
+                        cell.classList.add('prefilled');
+                    } else {
+                        cell.classList.add('user-filled');
+                        
+                        // Check if the value is correct
+                        if (value !== gameState.solution[row][col]) {
+                            cell.classList.add('error');
+                        }
+                    }
+                }
+                
+                // Highlight selected cell and related cells
+                if (gameState.selectedCell) {
+                    const selectedRow = gameState.selectedCell.row;
+                    const selectedCol = gameState.selectedCell.col;
+                    
+                    if (row === selectedRow && col === selectedCol) {
+                        cell.classList.add('selected');
+                    } else if (row === selectedRow || col === selectedCol || 
+                              (Math.floor(row / 3) === Math.floor(selectedRow / 3) && 
+                               Math.floor(col / 3) === Math.floor(selectedCol / 3))) {
+                        cell.classList.add('highlighted');
+                    }
+                    
+                    // Highlight same numbers
+                    if (value !== 0 && value === gameState.board[selectedRow][selectedCol]) {
+                        cell.classList.add('same-number');
+                    }
+                }
+            });
+        }
+
+        // Start the game timer
+        function startTimer() {
+            gameState.timerRunning = true;
+            
+            const timerInterval = setInterval(() => {
+                if (gameState.timerRunning) {
+                    gameState.timer++;
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+
+        // Update the timer display
+        function updateTimerDisplay() {
+            const minutes = Math.floor(gameState.timer / 60);
+            const seconds = gameState.timer % 60;
+            document.getElementById('timeDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Handle cell selection
+        function handleCellClick(event) {
+            const cell = event.target;
+            if (!cell.classList.contains('cell')) return;
+            
+            const row = parseInt(cell.dataset.row);
+            const col = parseInt(cell.dataset.col);
+            
+            // Don't allow selection of prefilled cells
+            if (gameState.initialBoard[row][col] !== 0) return;
+            
+            gameState.selectedCell = { row, col };
+            renderBoard();
+        }
+
+        // Handle number input
+        function handleNumberInput(number) {
+            if (!gameState.selectedCell) return;
+            
+            const { row, col } = gameState.selectedCell;
+            
+            // Don't allow changing prefilled cells
+            if (gameState.initialBoard[row][col] !== 0) return;
+            
+            // Save move for undo functionality
+            gameState.moves.push({
+                row,
+                col,
+                previousValue: gameState.board[row][col],
+                newValue: number
+            });
+            
+            // Update board
+            gameState.board[row][col] = number;
+            
+            renderBoard();
+            
+            // Check for win
+            if (checkWin()) {
+                showWinModal();
+            }
+        }
+
+        // Handle erase
+        function handleErase() {
+            if (!gameState.selectedCell) return;
+            
+            const { row, col } = gameState.selectedCell;
+            
+            // Don't allow erasing prefilled cells
+            if (gameState.initialBoard[row][col] !== 0) return;
+            
+            // Save move for undo functionality
+            gameState.moves.push({
+                row,
+                col,
+                previousValue: gameState.board[row][col],
+                newValue: 0
+            });
+            
+            // Update board
+            gameState.board[row][col] = 0;
+            
+            renderBoard();
+        }
+
+        // Handle undo
+        function handleUndo() {
+            if (gameState.moves.length === 0) return;
+            
+            const lastMove = gameState.moves.pop();
+            gameState.board[lastMove.row][lastMove.col] = lastMove.previousValue;
+            
+            renderBoard();
+        }
+
+        // Handle hint
+        function handleHint() {
+            if (!gameState.selectedCell) {
+                alert('Please select a cell first!');
+                return;
+            }
+            
+            // Show ad modal for hint
+            document.getElementById('hintAdModal').style.display = 'flex';
+        }
+
+        // Apply hint after watching ad
+        function applyHint() {
+            const { row, col } = gameState.selectedCell;
+            
+            // Don't provide hints for prefilled cells
+            if (gameState.initialBoard[row][col] !== 0) return;
+            
+            // Save move for undo functionality
+            gameState.moves.push({
+                row,
+                col,
+                previousValue: gameState.board[row][col],
+                newValue: gameState.solution[row][col]
+            });
+            
+            // Update board with correct value
+            gameState.board[row][col] = gameState.solution[row][col];
+            gameState.hintsUsed++;
+            
+            renderBoard();
+            
+            // Check for win
+            if (checkWin()) {
+                showWinModal();
+            }
+            
+            // Close hint modal
+            document.getElementById('hintAdModal').style.display = 'none';
+        }
+
+        // Check if the puzzle is solved
+        function checkWin() {
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    if (gameState.board[row][col] !== gameState.solution[row][col]) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        // Show win modal
+        function showWinModal() {
+            gameState.timerRunning = false;
+            document.getElementById('finalTime').textContent = document.getElementById('timeDisplay').textContent;
+            document.getElementById('winModal').style.display = 'flex';
+        }
+
+        // Change difficulty
+        function changeDifficulty(difficulty) {
+            gameState.difficulty = difficulty;
+            
+            // Update active button in settings
+            document.querySelectorAll('.difficulty-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`.difficulty-option[data-difficulty="${difficulty}"]`).classList.add('active');
+            
+            // Update difficulty display in game
+            document.getElementById('difficultyDisplay').textContent = 
+                difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+            
+            // Generate new puzzle
+            generatePuzzle();
+            
+            // Reset timer
+            gameState.timer = 0;
+            gameState.timerRunning = true;
+            updateTimerDisplay();
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const themeIcon = document.querySelector('#themeToggle i');
+            const themeToggleSetting = document.getElementById('themeToggleSetting');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.className = 'fas fa-sun';
+                themeToggleSetting.classList.add('active');
+            } else {
+                themeIcon.className = 'fas fa-moon';
+                themeToggleSetting.classList.remove('active');
+            }
+        }
+
+        // Toggle pause/resume
+        function togglePause() {
+            gameState.timerRunning = !gameState.timerRunning;
+            const pauseIcon = document.querySelector('#pauseBtn i');
+            
+            if (gameState.timerRunning) {
+                pauseIcon.className = 'fas fa-pause';
+            } else {
+                pauseIcon.className = 'fas fa-play';
+            }
+        }
+
+        // Save game state to localStorage
+        function saveGameState() {
+            const gameData = {
+                board: gameState.board,
+                initialBoard: gameState.initialBoard,
+                solution: gameState.solution,
+                timer: gameState.timer,
+                difficulty: gameState.difficulty,
+                moves: gameState.moves,
+                hintsUsed: gameState.hintsUsed
+            };
+            
+            localStorage.setItem('sudokuGame', JSON.stringify(gameData));
+        }
+
+        // Load game state from localStorage
+        function loadGameState() {
+            const savedGame = localStorage.getItem('sudokuGame');
+            
+            if (savedGame) {
+                const gameData = JSON.parse(savedGame);
+                
+                gameState.board = gameData.board;
+                gameState.initialBoard = gameData.initialBoard;
+                gameState.solution = gameData.solution;
+                gameState.timer = gameData.timer;
+                gameState.difficulty = gameData.difficulty;
+                gameState.moves = gameData.moves;
+                gameState.hintsUsed = gameData.hintsUsed;
+                
+                // Update UI
+                updateTimerDisplay();
+                document.getElementById('difficultyDisplay').textContent = 
+                    gameState.difficulty.charAt(0).toUpperCase() + gameState.difficulty.slice(1);
+                
+                renderBoard();
+            }
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Screen navigation
+            document.getElementById('playBtn').addEventListener('click', () => {
+                showScreen('gameScreen');
+                initGame();
+            });
+            
+            document.getElementById('backBtn').addEventListener('click', () => {
+                showScreen('homeScreen');
+            });
+            
+            // Settings
+            document.getElementById('homeSettingsBtn').addEventListener('click', () => {
+                document.getElementById('settingsModal').style.display = 'flex';
+            });
+            
+            document.getElementById('closeSettingsBtn').addEventListener('click', () => {
+                document.getElementById('settingsModal').style.display = 'none';
+            });
+            
+            // Difficulty selection in settings
+            document.querySelectorAll('.difficulty-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    changeDifficulty(option.dataset.difficulty);
+                });
+            });
+            
+            // Theme toggle in settings
+            document.getElementById('themeToggleSetting').addEventListener('click', toggleTheme);
+            
+            // Cell clicks
+            document.getElementById('gameBoard').addEventListener('click', handleCellClick);
+            
+            // Number pad clicks
+            document.getElementById('numberPad').addEventListener('click', (event) => {
+                const target = event.target;
+                
+                if (target.classList.contains('number-btn')) {
+                    if (target.dataset.number) {
+                        handleNumberInput(parseInt(target.dataset.number));
+                    } else if (target.classList.contains('eraser')) {
+                        handleErase();
+                    } else if (target.classList.contains('note')) {
+                        // Toggle note mode
+                        gameState.noteMode = !gameState.noteMode;
+                        document.querySelectorAll('.number-btn.note').forEach(btn => {
+                            btn.classList.toggle('active', gameState.noteMode);
+                        });
+                    } else if (target.classList.contains('hint')) {
+                        handleHint();
+                    } else if (target.classList.contains('undo')) {
+                        handleUndo();
+                    }
+                }
+            });
+            
+            // Control buttons
+            document.getElementById('eraseBtn').addEventListener('click', handleErase);
+            document.getElementById('undoBtn').addEventListener('click', handleUndo);
+            document.getElementById('hintBtn').addEventListener('click', handleHint);
+            
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            
+            // Pause button
+            document.getElementById('pauseBtn').addEventListener('click', togglePause);
+            
+            // Modal buttons
+            document.getElementById('playAgainBtn').addEventListener('click', () => {
+                document.getElementById('winModal').style.display = 'none';
+                generatePuzzle();
+                gameState.timer = 0;
+                gameState.timerRunning = true;
+                updateTimerDisplay();
+            });
+            
+            document.getElementById('shareBtn').addEventListener('click', () => {
+                alert('Share functionality would be implemented here!');
+            });
+            
+            document.getElementById('watchAdBtn').addEventListener('click', applyHint);
+            
+            document.getElementById('cancelHintBtn').addEventListener('click', () => {
+                document.getElementById('hintAdModal').style.display = 'none';
+            });
+            
+            // Save game state periodically
+            setInterval(saveGameState, 10000);
+            
+            // Save game state when page is about to unload
+            window.addEventListener('beforeunload', saveGameState);
+        }
+
+        // Initialize the app when the page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+        });
+    </script>
+</body>
+</html>
