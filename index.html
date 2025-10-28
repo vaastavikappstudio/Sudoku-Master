@@ -62,21 +62,32 @@
             align-items: center;
             padding: 20px;
             text-align: center;
+            position: relative;
         }
 
         .logo {
             margin-bottom: 40px;
+            text-align: center;
         }
 
         .logo h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .logo p {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .logo-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: rgba(255,255,255,0.9);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .menu {
@@ -107,6 +118,7 @@
         .menu-btn:hover {
             background-color: rgba(255, 255, 255, 0.25);
             transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .menu-btn i {
@@ -202,19 +214,24 @@
 
         /* Top Banner Ad Placeholder */
         .ad-banner {
-            background: linear-gradient(to right, #667eea, #764ba2);
-            color: white;
+            background: #f8f9fa;
+            color: #333;
             text-align: center;
-            padding: 12px;
+            padding: 10px;
             font-size: 0.9rem;
             font-weight: 500;
             position: sticky;
             top: 0;
             z-index: 99;
+            border-bottom: 1px solid #dee2e6;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .ad-banner i {
-            margin-right: 8px;
+        .ad-banner iframe {
+            border: none;
         }
 
         .container {
@@ -427,21 +444,6 @@
             transform: translateY(-2px);
         }
 
-        /* Bottom Banner Ad Placeholder */
-        .ad-banner-bottom {
-            background: linear-gradient(to right, #2193b0, #6dd5ed);
-            color: white;
-            text-align: center;
-            padding: 12px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            width: 100%;
-        }
-
-        .ad-banner-bottom i {
-            margin-right: 8px;
-        }
-
         /* Modal Styles */
         .modal {
             display: none;
@@ -505,6 +507,35 @@
         .modal-btn.secondary {
             background-color: #e9ecef;
             color: var(--dark);
+        }
+
+        /* Ad Modal */
+        .ad-modal {
+            background-color: #1a1a1a;
+            color: white;
+        }
+
+        .ad-countdown {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #ffcc00;
+        }
+
+        .ad-content {
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #2a2a2a;
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 20px;
+        }
+
+        .ad-content p {
+            margin-bottom: 10px;
         }
 
         /* Settings Modal */
@@ -592,24 +623,6 @@
             transform: translateX(26px);
         }
 
-        /* Interstitial Ad Placeholder */
-        .interstitial-ad {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 30px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .interstitial-ad h3 {
-            margin-bottom: 15px;
-        }
-
-        .interstitial-ad p {
-            margin-bottom: 20px;
-        }
-
         /* Responsive Design */
         @media (max-width: 600px) {
             .game-info {
@@ -659,6 +672,9 @@
         </button>
         
         <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-puzzle-piece"></i>
+            </div>
             <h1>Sudoku Master</h1>
             <p>by Vastavik App Studio</p>
         </div>
@@ -668,18 +684,6 @@
                 <i class="fas fa-play"></i>
                 Play Sudoku
             </button>
-            <button class="menu-btn" id="dailyChallengeBtn">
-                <i class="fas fa-calendar-day"></i>
-                Daily Challenge
-            </button>
-            <button class="menu-btn" id="statisticsBtn">
-                <i class="fas fa-chart-bar"></i>
-                Statistics
-            </button>
-            <button class="menu-btn" id="leaderboardBtn">
-                <i class="fas fa-trophy"></i>
-                Leaderboard
-            </button>
         </div>
     </div>
 
@@ -687,7 +691,16 @@
     <div id="gameScreen" class="screen">
         <!-- Top Banner Ad Placeholder -->
         <div class="ad-banner">
-            <i class="fas fa-ad"></i> Advertisement - Try our new puzzle collection!
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '1525601620cc516257fa9d644baa3717',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/1525601620cc516257fa9d644baa3717/invoke.js"></script>
         </div>
 
         <header>
@@ -738,18 +751,6 @@
                     <i class="fas fa-lightbulb"></i> Hint
                 </button>
             </div>
-
-            <!-- Interstitial Ad Placeholder -->
-            <div class="interstitial-ad">
-                <h3>Advertisement</h3>
-                <p>Full-screen ad would appear here after completing a puzzle</p>
-                <button class="modal-btn secondary">Close Ad</button>
-            </div>
-        </div>
-
-        <!-- Bottom Banner Ad Placeholder -->
-        <div class="ad-banner-bottom">
-            <i class="fas fa-ad"></i> Advertisement - Unlock premium features now!
         </div>
     </div>
 
@@ -769,17 +770,33 @@
     </div>
 
     <!-- Hint Ad Modal -->
-    <div class="modal" id="hintAdModal">
+    <div class="modal ad-modal" id="hintAdModal">
         <div class="modal-content">
             <h2>Get a Hint</h2>
-            <p>Watch a short video to get a hint for this puzzle.</p>
-            <div class="interstitial-ad">
-                <h3>Video Advertisement</h3>
-                <p>Video ad would play here</p>
+            <p>Watch this ad to get a hint for your puzzle.</p>
+            <div class="ad-countdown" id="hintCountdown">10</div>
+            <div class="ad-content">
+                <p>Advertisement would play here</p>
+                <script type='text/javascript' src='//pl27905276.effectivegatecpm.com/4f/30/0d/4f300dbaa4c0c6de34aa311b6b45ef6e.js'></script>
             </div>
             <div class="modal-buttons">
-                <button class="modal-btn primary" id="watchAdBtn">Watch Ad</button>
                 <button class="modal-btn secondary" id="cancelHintBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Win Ad Modal -->
+    <div class="modal ad-modal" id="winAdModal">
+        <div class="modal-content">
+            <h2>Congratulations!</h2>
+            <p>Thanks for playing Sudoku Master!</p>
+            <div class="ad-countdown" id="winCountdown">10</div>
+            <div class="ad-content">
+                <p>Advertisement would play here</p>
+                <script type='text/javascript' src='//pl27905276.effectivegatecpm.com/4f/30/0d/4f300dbaa4c0c6de34aa311b6b45ef6e.js'></script>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" id="continueBtn">Continue</button>
             </div>
         </div>
     </div>
@@ -1131,7 +1148,7 @@
             renderBoard();
         }
 
-        // Handle hint
+        // Handle hint with ad
         function handleHint() {
             if (!gameState.selectedCell) {
                 alert('Please select a cell first!');
@@ -1139,7 +1156,7 @@
             }
             
             // Show ad modal for hint
-            document.getElementById('hintAdModal').style.display = 'flex';
+            showAdModal('hint');
         }
 
         // Apply hint after watching ad
@@ -1167,9 +1184,32 @@
             if (checkWin()) {
                 showWinModal();
             }
+        }
+
+        // Show ad modal with countdown
+        function showAdModal(type) {
+            const modal = document.getElementById(type === 'hint' ? 'hintAdModal' : 'winAdModal');
+            const countdownElement = document.getElementById(type === 'hint' ? 'hintCountdown' : 'winCountdown');
             
-            // Close hint modal
-            document.getElementById('hintAdModal').style.display = 'none';
+            modal.style.display = 'flex';
+            let countdown = 10;
+            
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    modal.style.display = 'none';
+                    
+                    if (type === 'hint') {
+                        applyHint();
+                    } else {
+                        // After win ad, show win modal
+                        document.getElementById('winModal').style.display = 'flex';
+                    }
+                }
+            }, 1000);
         }
 
         // Check if the puzzle is solved
@@ -1184,11 +1224,13 @@
             return true;
         }
 
-        // Show win modal
+        // Show win modal with ad first
         function showWinModal() {
             gameState.timerRunning = false;
             document.getElementById('finalTime').textContent = document.getElementById('timeDisplay').textContent;
-            document.getElementById('winModal').style.display = 'flex';
+            
+            // Show ad first, then win modal
+            showAdModal('win');
         }
 
         // Change difficulty
@@ -1361,10 +1403,13 @@
                 alert('Share functionality would be implemented here!');
             });
             
-            document.getElementById('watchAdBtn').addEventListener('click', applyHint);
-            
             document.getElementById('cancelHintBtn').addEventListener('click', () => {
                 document.getElementById('hintAdModal').style.display = 'none';
+            });
+            
+            document.getElementById('continueBtn').addEventListener('click', () => {
+                document.getElementById('winAdModal').style.display = 'none';
+                document.getElementById('winModal').style.display = 'flex';
             });
             
             // Save game state periodically
